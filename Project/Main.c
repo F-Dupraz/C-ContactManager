@@ -1,13 +1,14 @@
 /* I'm learninng C and practicing data structures and algorithms */
+
 #include <stdio.h>
+
+#include "Display.h"
 
 int main()
 {
-	printf(" 1. Show contacts.\n 2. Add a new contact.\n 3. Delete a contact.\n 4. Update a contact.\n 5. Show one contact.\n");
-	int choise_num;
-	int choise = scanf("%d", &choise_num);
+	int choise = ShowDisplay();
 
-	switch (choise_num)
+	switch (choise)
 	{
 		case 1:
 			printf(" 1\n");
@@ -25,7 +26,6 @@ int main()
 			printf(" 5\n");
 			break;
 		default:
-			printf("Sos boludo?\n");
 			break;
 	}
 
