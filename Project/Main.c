@@ -9,7 +9,7 @@
 int main()
 {
 	int choise = ShowDisplay();
-	char complete_name[50], name[25], last_name[25], phone_number[15], address[50], email[50], birthday[10];
+	char complete_name[50], name[25], last_name[25], phone_number[15], address[50], email[50], birthday[15];
 	
 	switch (choise)
 	{
