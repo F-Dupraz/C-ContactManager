@@ -40,7 +40,7 @@ int main()
 			strcpy_s(new_contact.email, sizeof(new_contact.email), email);
 			strcpy_s(new_contact.birthday, sizeof(new_contact.birthday), birthday);
 
-			CreateContact(new_contact);
+			SvaeContact(new_contact);
 
 			break;
 		case 3:

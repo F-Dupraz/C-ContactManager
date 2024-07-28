@@ -1,6 +1,6 @@
-Fabricio Dupraz, 543533683395, LosInmigrantes140, duprazfabricio@gmail.com, 26-02-2007
-Fabricio Dupraz, 3533, Inmigrantes, dupraz@gmail.com, 02-10-2008
-Fabricio Dupraz, 683395, Inmigrantes110, fabricio@gmail.com, 02-10-2008
-Fabri Dupra, 1234555555, asdfasdfadsf, asdf@gmail.com, 22-08-2007
-asdf adsf, 123412341234, asdfasdf123, asdfasdf@gmail.com, 15-02-2007
-asdf asdf, 12341234, asdfasdf140, asdfasdf@sadf.com, 20-02-2007
+Fabricio Dupraz, 1, adsfasdf140, asdfasdf@gmail.com, 1
+Fabricio Dupraz, 2, asdasdf, asfsadf, 2
+ad as, 3, asdfasdf, asdf, 3
+asdfasdf asdf, 4, asdfadsaf, asdfasdf, 4
+asdf asdf, 5, asdf, asdf, 5
+Fabricio Dupraz, 6, asdfasdf, asdfasdf, 6

@@ -26,5 +26,8 @@
     <ClInclude Include="Contacts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AVLNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

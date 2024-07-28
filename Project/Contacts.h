@@ -12,24 +12,13 @@ typedef struct Contact
 	char birthday[15];
 } Contact;
 
-void CreateContact(Contact cont)
+void SaveContact(Contact cont)
 {
-	FILE* file = fopen("contacts.txt", "a+");
-
-	long seek_offset = 0L;
-
-	char cr[50];
-	char cr_name[25];
-	char cr_last_name[25];
+	FILE* file = fopen("contacts.txt", "wb");
 
 	if (file != NULL)
 	{
-		fseek(file, seek_offset, SEEK_SET);
-		fscanf_s(file, "%s %s", cr_name, (unsigned int)sizeof(cr_name), cr_last_name, (unsigned int)sizeof(cr_last_name));
-		strcpy_s(cr, 50, cr_name);
-		strcat_s(cr, 50, " ");
-		strcat_s(cr, 50, cr_last_name);
-		printf("\n %s", cr);
+		fseek(file, 3L, SEEK_SET);
 		fprintf_s(file, "%s, %s, %s, %s, %s\n", cont.name, cont.phone_number, cont.address, cont.email, cont.birthday);
 		fclose(file);
 	}
