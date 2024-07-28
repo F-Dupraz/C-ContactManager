@@ -1,18 +1,28 @@
 /* I'm learninng C and practicing data structures and algorithms */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "Display.h"
-#include "Contacts.h"
+#include "AVLNode.h"
+#include "File.h"
 
 int main()
 {
-	int choise = ShowDisplay();
+	AVLNode* root = NULL;
+	Contact new_contact;
+	const char* filename = "contacts.txt";
 	char complete_name[50], name[25], last_name[25], phone_number[15], address[50], email[50], birthday[15];
 	
-	switch (choise)
+	LoadContacts(&root, filename);
+
+	while (1)
 	{
+		int choise = ShowDisplay();
+
+		switch (choise)
+		{
 		case 1:
 			printf(" 1\n");
 			break;
@@ -28,19 +38,16 @@ int main()
 			printf("\n Input the birthday: ");
 			scanf_s("%s", birthday, (unsigned int)sizeof(birthday));
 
-			Contact new_contact;
-
 			strcpy_s(complete_name, 50, name);
 			strcat_s(complete_name, 50, " ");
 			strcat_s(complete_name, 50, last_name);
-
 			strcpy_s(new_contact.name, sizeof(new_contact.name), complete_name);
 			strcpy_s(new_contact.phone_number, sizeof(new_contact.phone_number), phone_number);
 			strcpy_s(new_contact.address, sizeof(new_contact.address), address);
 			strcpy_s(new_contact.email, sizeof(new_contact.email), email);
 			strcpy_s(new_contact.birthday, sizeof(new_contact.birthday), birthday);
 
-			SvaeContact(new_contact);
+			root = Insert(root, new_contact);
 
 			break;
 		case 3:
@@ -52,8 +59,13 @@ int main()
 		case 5:
 			printf(" 5\n");
 			break;
+		case 6:
+			SaveContacts(root, filename);
+			printf("Contactos guardados en el archivo: %s.\n", filename);
+			exit(0);
 		default:
 			break;
+		}
 	}
 
 	return 0;
