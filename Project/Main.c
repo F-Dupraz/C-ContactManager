@@ -24,7 +24,9 @@ int main()
 		switch (choise)
 		{
 		case 1:
-			printf(" 1\n");
+			printf("\n Estos son todos tus contactos: \n");
+			PreOrder(root);
+
 			break;
 		case 2:
 			printf("\n Input the name and last name only: ");
@@ -57,11 +59,24 @@ int main()
 			printf(" 4\n");
 			break;
 		case 5:
-			printf(" 5\n");
+			printf(" Insert de name and last name: ");
+			scanf_s("%s %s", name, (unsigned int)sizeof(name), last_name, (unsigned int)sizeof(last_name));
+			
+			strcpy_s(complete_name, 50, name);
+			strcat_s(complete_name, 50, " ");
+			strcat_s(complete_name, 50, last_name);
+
+			AVLNode* found = Search(root, complete_name);
+
+			if (found != NULL)
+				printf("  %s:\n  Phone number: %s.\n  Address: %s.\n  Email: %s.\n  Birthday: %s.\n\n", found->contact.name, found->contact.phone_number, found->contact.address, found->contact.email, found->contact.birthday);
+			else
+				printf("  Contacto no encontrado.\n");
+
 			break;
 		case 6:
 			SaveContacts(root, filename);
-			printf("Contactos guardados en el archivo: %s.\n", filename);
+			printf("\n Contactos guardados en el archivo: %s.\n", filename);
 			exit(0);
 		default:
 			break;
