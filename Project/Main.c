@@ -24,7 +24,7 @@ int main()
 		switch (choise)
 		{
 		case 1:
-			printf("\n Estos son todos tus contactos: \n");
+			printf("\n Estos son todos tus contactos: \n\n");
 			PreOrder(root);
 
 			break;
@@ -66,7 +66,32 @@ int main()
 
 			break;
 		case 4:
-			printf(" 4\n");
+			printf("\n Input the name and last name only: ");
+			scanf_s("%s %s", name, (unsigned int)sizeof(name), last_name, (unsigned int)sizeof(last_name));
+			printf("\n Change the phone number: ");
+			scanf_s("%s", phone_number, (unsigned int)sizeof(phone_number));
+			printf("\n Change the address: ");
+			scanf_s("%s", address, (unsigned int)sizeof(address));
+			printf("\n Change the email: ");
+			scanf_s("%s", email, (unsigned int)sizeof(email));
+			printf("\n Change the birthday: ");
+			scanf_s("%s", birthday, (unsigned int)sizeof(birthday));
+
+			strcpy_s(complete_name, 50, name);
+			strcat_s(complete_name, 50, " ");
+			strcat_s(complete_name, 50, last_name);
+			strcpy_s(new_contact.name, sizeof(new_contact.name), complete_name);
+			strcpy_s(new_contact.phone_number, sizeof(new_contact.phone_number), phone_number);
+			strcpy_s(new_contact.address, sizeof(new_contact.address), address);
+			strcpy_s(new_contact.email, sizeof(new_contact.email), email);
+			strcpy_s(new_contact.birthday, sizeof(new_contact.birthday), birthday);
+
+			root = Delete(root, complete_name);
+
+			root = Insert(root, new_contact);
+
+			printf("\n Your contact was updated succesfully!.\n");
+
 			break;
 		case 5:
 			printf(" Insert de name and last name: ");
