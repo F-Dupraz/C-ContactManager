@@ -77,6 +77,15 @@ AVLNode* CreateNode(Contact contact)
 	return node;
 }
 
+AVLNode* MinValueNode(AVLNode* node) {
+    AVLNode* current = node;
+
+    while (current->left != NULL)
+        current = current->left;
+
+    return current;
+}
+
 AVLNode* Insert(AVLNode* node, Contact contact)
 {
     if (node == NULL)
@@ -123,4 +132,64 @@ AVLNode* Search(AVLNode* root, char* name)
         return Search(root->left, name);
 
     return Search(root->right, name);
+}
+
+AVLNode* Delete(AVLNode* root, char* name)
+{
+    if (root == NULL)
+        return root;
+
+    if (strcmp(name, root->contact.name) < 0)
+        root->left = Delete(root->left, name);
+    else if (strcmp(name, root->contact.name) > 0)
+        root->right = Delete(root->right, name);
+    else
+    {
+        if ((root->left == NULL) || (root->right == NULL))
+        {
+            AVLNode* temp = root->left ? root->left : root->right;
+
+            if (temp == NULL)
+            {
+                temp = root;
+                root = NULL;
+            }
+            else
+                *root = *temp;
+            free(temp);
+        }
+        else
+        {
+            AVLNode* temp = MinValueNode(root->right);
+            root->contact = temp->contact;
+            root->right = Delete(root->right, temp->contact.name);
+        }
+    }
+
+    if (root == NULL)
+        return root;
+
+    root->height = 1 + max(height(root->left), height(root->right));
+
+    int balance = GetBalance(root);
+
+    if (balance > 1 && GetBalance(root->left) >= 0)
+        return RightRotate(root);
+
+    if (balance > 1 && GetBalance(root->left) < 0)
+    {
+        root->left = LeftRotate(root->left);
+        return RightRotate(root);
+    }
+
+    if (balance < -1 && GetBalance(root->right) <= 0)
+        return LeftRotate(root);
+
+    if (balance < -1 && GetBalance(root->right) > 0)
+    {
+        root->right = RightRotate(root->right);
+        return LeftRotate(root);
+    }
+
+    return root;
 }

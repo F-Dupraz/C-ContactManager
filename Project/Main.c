@@ -53,7 +53,17 @@ int main()
 
 			break;
 		case 3:
-			printf(" 3\n");
+			printf("\n Input the name and last name only: ");
+			scanf_s("%s %s", name, (unsigned int)sizeof(name), last_name, (unsigned int)sizeof(last_name));
+			
+			strcpy_s(complete_name, 50, name);
+			strcat_s(complete_name, 50, " ");
+			strcat_s(complete_name, 50, last_name);
+
+			root = Delete(root, complete_name);
+
+			printf("\n Contact deleted succesflly!\n\n");
+
 			break;
 		case 4:
 			printf(" 4\n");
@@ -79,6 +89,8 @@ int main()
 			printf("\n Contactos guardados en el archivo: %s.\n", filename);
 			exit(0);
 		default:
+			printf("\n Invalid option.\n");
+
 			break;
 		}
 	}
