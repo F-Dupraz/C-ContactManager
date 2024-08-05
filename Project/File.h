@@ -45,13 +45,3 @@ void LoadContacts(AVLNode** root, const char* filename)
     LoadFromFile(root, file);
     fclose(file);
 }
-
-void PreOrder(AVLNode* root)
-{
-    if (root != NULL)
-    {
-        printf("  %s:\n   Phone number: %s.\n   Address: %s.\n   Email: %s.\n   Birthday: %s.\n\n", root->contact.name, root->contact.phone_number, root->contact.address, root->contact.email, root->contact.birthday);
-        PreOrder(root->left);
-        PreOrder(root->right);
-    }
-}

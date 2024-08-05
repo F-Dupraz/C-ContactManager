@@ -169,7 +169,7 @@ AVLNode* Delete(AVLNode* root, char* name)
     if (root == NULL)
         return root;
 
-    root->height = 1 + max(height(root->left), height(root->right));
+    root->height = 1 + max_h(height(root->left), height(root->right));
 
     int balance = GetBalance(root);
 

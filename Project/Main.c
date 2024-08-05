@@ -7,12 +7,17 @@
 #include <string.h>
 #include <tchar.h>
 
-//#include "Display.h"
-//#include "AVLNode.h"
-//#include "File.h"
+#include "AVLNode.h"
+#include "File.h"
 
 #define CUSTOM_COLOR_CONTACTS_S RGB(33, 33, 33)
 #define CUSTOM_COLOR_IDKY_S RGB(45, 45, 81)
+
+AVLNode* root = NULL;
+Contact new_contact;
+const char* filename = "contacts.txt";
+
+char complete_name[50], name[25], last_name[25], phone_number[15], address[50], email[50], birthday[15];
 
 static TCHAR szWindowClass[] = _T("C-ContactManager");
 
@@ -22,6 +27,67 @@ HINSTANCE hInst;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+LOGFONTA createFontTitles(int size) {
+    LOGFONTA logFont;
+
+    memset(&logFont, 0, sizeof(LOGFONTA));
+
+    logFont.lfHeight = size;
+    logFont.lfWidth = 0;
+    logFont.lfEscapement = 0;
+    logFont.lfOrientation = 0;
+    logFont.lfWeight = FW_BOLD;
+    logFont.lfItalic = FALSE;
+    logFont.lfUnderline = FALSE;
+    logFont.lfStrikeOut = FALSE;
+    logFont.lfCharSet = ANSI_CHARSET;
+    logFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+    logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+    logFont.lfQuality = DEFAULT_QUALITY;
+    logFont.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+    strcpy_s(logFont.lfFaceName, 16, "Times New Roman");
+
+    return logFont;
+}
+
+LOGFONTA createFontNormal(int size) {
+    LOGFONTA logFont;
+
+    memset(&logFont, 0, sizeof(LOGFONTA));
+
+    logFont.lfHeight = size;
+    logFont.lfWidth = 0;
+    logFont.lfEscapement = 0;
+    logFont.lfOrientation = 0;
+    logFont.lfWeight = FW_REGULAR | FW_NORMAL;
+    logFont.lfItalic = FALSE;
+    logFont.lfUnderline = FALSE;
+    logFont.lfStrikeOut = FALSE;
+    logFont.lfCharSet = ANSI_CHARSET;
+    logFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+    logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+    logFont.lfQuality = DEFAULT_QUALITY;
+    logFont.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+    strcpy_s(logFont.lfFaceName, 16, "Times New Roman");
+
+    return logFont;
+}
+
+void PreOrder(AVLNode* root, HDC hdc, int cc)
+{
+    if (root != NULL)
+    {
+        TextOutW(hdc,
+            20, (65 + cc),
+            root->contact.name, _tcslen(root->contact.name));
+
+        cc += 31;
+
+        PreOrder(root->left, hdc, cc);
+        PreOrder(root->right, hdc, cc);
+    }
+}
+
 int WINAPI wWinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -29,6 +95,8 @@ int WINAPI wWinMain(
 	_In_ int       nCmdShow
 )
 {
+    LoadContacts(&root, filename);
+
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -108,19 +176,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     ps_isky_size.rcPaint.bottom = 2000L;
 
     HDC hdc;
-    //TCHAR greeting[] = _T("Hello, Windows desktop!\nYour favorite agenda.\n");
+    static HFONT hFont;
+    static HBRUSH hBrush;
+    TCHAR greeting[] = _T("Your contacts:");
+
+    int contact_counter = 0;
 
     switch (message)
     {
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
 
+        LOGFONTA logFontT = createFontTitles(36);
+
+        HFONT hNewFontT = CreateFontIndirectA(&logFontT);
+
         FillRect(hdc, &ps_contacts_side.rcPaint, CreateSolidBrush(CUSTOM_COLOR_CONTACTS_S));
         FillRect(hdc, &ps_isky_size.rcPaint, CreateSolidBrush(CUSTOM_COLOR_IDKY_S));
 
-        /*TextOut(hdc,
-            25, 25,
-            greeting, _tcslen(greeting));*/
+        SelectObject(hdc, hNewFontT);
+        SetTextColor(hdc, RGB(250, 250, 250));
+        SetBkColor(hdc, CUSTOM_COLOR_CONTACTS_S);
+
+        TextOutW(hdc,
+            20, 20,
+            greeting, _tcslen(greeting));
+
+        LOGFONTA logFontN = createFontNormal(24);
+
+        HFONT hNewFontN = CreateFontIndirectA(&logFontN);
+
+        SelectObject(hdc, hNewFontN);
+
+        PreOrder(root, hdc, contact_counter);
+
+        contact_counter = 0;
 
         EndPaint(hWnd, &ps);
         break;
@@ -135,12 +225,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//AVLNode* root = NULL;
-//Contact new_contact;
-//const char* filename = "contacts.txt";
-//char complete_name[50], name[25], last_name[25], phone_number[15], address[50], email[50], birthday[15];
-//
-//LoadContacts(&root, filename);
+
+
 //
 //while (1)
 //{
