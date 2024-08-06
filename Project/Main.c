@@ -77,14 +77,29 @@ void PreOrder(AVLNode* root, HDC hdc, int cc)
 {
     if (root != NULL)
     {
-        TextOutW(hdc,
-            20, (65 + cc),
-            root->contact.name, _tcslen(root->contact.name));
+        TextOutA(hdc,
+            25, (80 + cc),
+            root->contact.name, sizeof(root->contact.name));
 
-        cc += 31;
-
-        PreOrder(root->left, hdc, cc);
-        PreOrder(root->right, hdc, cc);
+        if (root->left != NULL && root->right != NULL)
+        {
+            cc += 31;
+            PreOrder(root->left, hdc, cc);
+            cc += 31;
+            PreOrder(root->right, hdc, cc);
+        }
+        else if (root->left != NULL && root->right == NULL)
+        {
+            cc += 31;
+            PreOrder(root->left, hdc, cc);
+        }
+        else if (root->left == NULL && root->right != NULL)
+        {
+            cc += 31;
+            PreOrder(root->right, hdc, cc);
+        }
+        else
+            return;
     }
 }
 
@@ -178,7 +193,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     HDC hdc;
     static HFONT hFont;
     static HBRUSH hBrush;
-    TCHAR greeting[] = _T("Your contacts:");
+    char contact_titles[] = "Your contacts:";
 
     int contact_counter = 0;
 
@@ -198,9 +213,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SetTextColor(hdc, RGB(250, 250, 250));
         SetBkColor(hdc, CUSTOM_COLOR_CONTACTS_S);
 
-        TextOutW(hdc,
+        TextOutA(hdc,
             20, 20,
-            greeting, _tcslen(greeting));
+            contact_titles, sizeof(contact_titles));
 
         LOGFONTA logFontN = createFontNormal(24);
 
