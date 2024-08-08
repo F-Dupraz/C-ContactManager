@@ -189,7 +189,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HFONT hFont;
     static HBRUSH hBrush;
     char contact_title[] = "Your contacts:";
-    //char contact_title[] = "Your contacts:";
+    char add_contact_title[] = "Add a new contact";
 
     int contact_counter = 0;
 
@@ -198,7 +198,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
 
-        LOGFONTA logFontT = createFont(36L, FW_NORMAL);
+        LOGFONTA logFontT = createFont(36L, FW_BOLD);
 
         HFONT hNewFontT = CreateFontIndirectA(&logFontT);
 
@@ -208,18 +208,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SelectObject(hdc, hNewFontT);
         SetTextColor(hdc, RGB(250, 250, 250));
         SetBkColor(hdc, CUSTOM_COLOR_CONTACTS_S);
-
         TextOutA(hdc,
             20, 20,
             contact_title, sizeof(contact_title));
 
-        LOGFONTA logFontN = createFont(24L, FW_BOLD);
+        LOGFONTA logFontN = createFont(24L, FW_NORMAL);
 
         HFONT hNewFontN = CreateFontIndirectA(&logFontN);
 
         SelectObject(hdc, hNewFontN);
 
         PreOrder(root, hdc, contact_counter);
+
+        SelectObject(hdc, hNewFontT);
+
+        SetBkColor(hdc, CUSTOM_COLOR_IDKY_S);
+        TextOutA(hdc,
+            320, 20,
+            add_contact_title, sizeof(add_contact_title));
+
+        SelectObject(hdc, hNewFontN);
+
+        TextOutA(hdc,
+            325, 85,
+            "Name and last name:", 20);
+        TextOutA(hdc,
+            325, 166,
+            "Phone number:", 14);
+        TextOutA(hdc,
+            325, 247,
+            "Address:", 9);
+        TextOutA(hdc,
+            325, 328,
+            "Email:", 7);
+        TextOutA(hdc,
+            325, 410,
+            "Birthday:", 11);
 
         contact_counter = 0;
 
