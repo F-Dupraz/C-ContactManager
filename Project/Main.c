@@ -27,7 +27,7 @@ HINSTANCE hInst;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-LOGFONTA createFontTitles(int size) {
+LOGFONTA createFont(LONG size, BYTE wh) {
     LOGFONTA logFont;
 
     memset(&logFont, 0, sizeof(LOGFONTA));
@@ -36,30 +36,7 @@ LOGFONTA createFontTitles(int size) {
     logFont.lfWidth = 0;
     logFont.lfEscapement = 0;
     logFont.lfOrientation = 0;
-    logFont.lfWeight = FW_BOLD;
-    logFont.lfItalic = FALSE;
-    logFont.lfUnderline = FALSE;
-    logFont.lfStrikeOut = FALSE;
-    logFont.lfCharSet = ANSI_CHARSET;
-    logFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
-    logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-    logFont.lfQuality = DEFAULT_QUALITY;
-    logFont.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
-    strcpy_s(logFont.lfFaceName, 16, "Times New Roman");
-
-    return logFont;
-}
-
-LOGFONTA createFontNormal(int size) {
-    LOGFONTA logFont;
-
-    memset(&logFont, 0, sizeof(LOGFONTA));
-
-    logFont.lfHeight = size;
-    logFont.lfWidth = 0;
-    logFont.lfEscapement = 0;
-    logFont.lfOrientation = 0;
-    logFont.lfWeight = FW_REGULAR | FW_NORMAL;
+    logFont.lfWeight = wh;
     logFont.lfItalic = FALSE;
     logFont.lfUnderline = FALSE;
     logFont.lfStrikeOut = FALSE;
@@ -77,9 +54,27 @@ void PreOrder(AVLNode* root, HDC hdc, int cc)
 {
     if (root != NULL)
     {
-        TextOutA(hdc,
-            25, (80 + cc),
-            root->contact.name, sizeof(root->contact.name));
+        char full_name[50] = "";
+        int s = 0;
+        for (int i = 0; i < 50; ++i) {
+            if (root->contact.name[i] == '\0') {
+                break;
+            }
+
+            if (root->contact.name[i] == ' ' && s <= 1) {
+                full_name[strlen(full_name)] = root->contact.name[i];
+                full_name[strlen(full_name) + 1] = '\0';
+                ++s;
+            }
+            else if (root->contact.name[i] != ' ' && s <= 1) {
+                full_name[strlen(full_name)] = root->contact.name[i];
+                full_name[strlen(full_name) + 1] = '\0';
+            }
+            else if (s == 2) {
+                TextOutA(hdc, 25, (80 + cc), full_name, strlen(full_name));
+                break;
+            }
+        }
 
         if (root->left != NULL && root->right != NULL)
         {
@@ -193,7 +188,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     HDC hdc;
     static HFONT hFont;
     static HBRUSH hBrush;
-    char contact_titles[] = "Your contacts:";
+    char contact_title[] = "Your contacts:";
+    //char contact_title[] = "Your contacts:";
 
     int contact_counter = 0;
 
@@ -202,7 +198,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
 
-        LOGFONTA logFontT = createFontTitles(36);
+        LOGFONTA logFontT = createFont(36L, FW_NORMAL);
 
         HFONT hNewFontT = CreateFontIndirectA(&logFontT);
 
@@ -215,9 +211,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         TextOutA(hdc,
             20, 20,
-            contact_titles, sizeof(contact_titles));
+            contact_title, sizeof(contact_title));
 
-        LOGFONTA logFontN = createFontNormal(24);
+        LOGFONTA logFontN = createFont(24L, FW_BOLD);
 
         HFONT hNewFontN = CreateFontIndirectA(&logFontN);
 
